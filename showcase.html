@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FY27 // Mike Price — Domain Expert Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#050509;
+  --ink:#EDEFF7;
+  --mute:rgba(237,239,247,.52);
+  --faint:rgba(237,239,247,.30);
+  --hair:rgba(237,239,247,.10);
+  --violet:#7B61FF;
+  --cyan:#26E5FF;
+  --pink:#FF3D8B;
+  --coral:#FF7C66;
+  --lime:#B8FF3D;
+  --grad:linear-gradient(100deg,var(--violet),var(--cyan) 42%,var(--pink) 80%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--void);color:var(--ink);
+  font-family:'Space Grotesk',sans-serif;font-weight:300;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+body.booting{overflow:hidden}
+.mono{font-family:'JetBrains Mono',monospace}
+@media(pointer:fine){body{cursor:none}a,button,.tilt,.hot{cursor:none}}
+
+/* ═══ AMBIENT LIGHT ═══ */
+#aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;filter:blur(90px);opacity:.55}
+#aurora i{position:absolute;display:block;border-radius:50%;mix-blend-mode:screen}
+.a1{width:52vw;height:52vw;background:var(--violet);top:-14%;left:-10%;animation:drift1 24s ease-in-out infinite}
+.a2{width:44vw;height:44vw;background:var(--cyan);top:24%;right:-14%;animation:drift2 30s ease-in-out infinite}
+.a3{width:40vw;height:40vw;background:var(--pink);bottom:-12%;left:22%;animation:drift3 27s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(16vw,10vh) scale(1.22)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1.1)}50%{transform:translate(-14vw,16vh) scale(.86)}}
+@keyframes drift3{0%,100%{transform:translate(0,0) scale(.95)}50%{transform:translate(12vw,-14vh) scale(1.25)}}
+#grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.30;
+  background-image:linear-gradient(var(--hair) 1px,transparent 1px),linear-gradient(90deg,var(--hair) 1px,transparent 1px);
+  background-size:74px 74px;
+  mask-image:radial-gradient(circle at var(--mx,50%) var(--my,42%),#000 0,#000 22%,transparent 62%);
+  -webkit-mask-image:radial-gradient(circle at var(--mx,50%) var(--my,42%),#000 0,#000 22%,transparent 62%);
+}
+#noise{
+  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+#vig{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 42%,rgba(5,5,9,.82) 100%)}
+
+/* ═══ CURSOR ═══ */
+#cdot,#cring{position:fixed;top:0;left:0;z-index:999;pointer-events:none;border-radius:50%;mix-blend-mode:difference}
+#cdot{width:6px;height:6px;background:#fff;margin:-3px 0 0 -3px}
+#cring{width:38px;height:38px;border:1px solid rgba(255,255,255,.55);margin:-19px 0 0 -19px;transition:width .28s,height .28s,margin .28s,border-color .28s}
+#cring.big{width:76px;height:76px;margin:-38px 0 0 -38px;border-color:rgba(255,255,255,.9)}
+@media(pointer:coarse){#cdot,#cring{display:none}}
+
+/* ═══ BOOT ═══ */
+#boot{
+  position:fixed;inset:0;z-index:900;background:var(--void);
+  display:flex;flex-direction:column;justify-content:center;padding:0 8vw;gap:9px;
+  transition:opacity .5s ease,visibility .5s;
+}
+#boot.gone{opacity:0;visibility:hidden}
+#boot p{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--faint);opacity:0}
+#boot p.on{opacity:1}
+#boot p b{color:var(--cyan);font-weight:400}
+#boot p.ok b{color:var(--lime)}
+#bootbar{height:1px;background:var(--hair);margin-top:22px;max-width:420px;position:relative;overflow:hidden}
+#bootbar i{position:absolute;inset:0 100% 0 0;background:var(--grad);animation:fill 1.5s .25s cubic-bezier(.6,0,.2,1) forwards}
+@keyframes fill{to{right:0}}
+
+/* ═══ CHROME ═══ */
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--grad);z-index:500;box-shadow:0 0 18px var(--cyan)}
+#rail{position:fixed;left:34px;top:50%;transform:translateY(-50%);z-index:400;display:flex;flex-direction:column;gap:1px}
+#rail a{display:flex;align-items:center;gap:13px;text-decoration:none;color:var(--faint);
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;padding:8px 0;transition:color .3s}
+#rail .tk{width:14px;height:1px;background:currentColor;transition:width .4s cubic-bezier(.2,.9,.2,1)}
+#rail .lb{opacity:0;transform:translateX(-8px);transition:.3s;white-space:nowrap;text-transform:uppercase}
+#rail:hover .lb{opacity:.8;transform:none}
+#rail a:hover{color:var(--ink)}
+#rail a.on{color:var(--cyan)}
+#rail a.on .tk{width:40px;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+#rail a.on .lb{opacity:1;transform:none}
+@media(max-width:1000px){#rail{display:none}}
+
+.wrap{max-width:1520px;margin:0 auto;padding:0 6vw;position:relative;z-index:5}
+@media(max-width:820px){.wrap{padding:0 24px}}
+
+/* ═══ HERO ═══ */
+#hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;position:relative;padding-top:8vh}
+.tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--cyan);display:flex;align-items:center;gap:14px;margin-bottom:30px}
+.tag:before{content:"";width:44px;height:1px;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+h1{font-size:clamp(4.2rem,17vw,15rem);font-weight:700;line-height:.82;letter-spacing:-.055em;position:relative}
+h1 .ch{display:inline-block;opacity:0;transform:translateY(.42em) rotateX(-55deg);filter:blur(14px);
+  transition:opacity .85s cubic-bezier(.2,.9,.2,1),transform .85s cubic-bezier(.2,.9,.2,1),filter .85s}
+h1.go .ch{opacity:1;transform:none;filter:none}
+.gradtext{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+  background-size:220% 100%;animation:sweep 7s linear infinite}
+h1 .wipe{display:inline-block;clip-path:inset(0 100% 0 0);
+  transition:clip-path 1.15s cubic-bezier(.16,.84,.28,1) .1s}
+h1.go .wipe{clip-path:inset(0 0 0 0)}
+@keyframes sweep{to{background-position:220% 0}}
+.hsub{margin-top:34px;display:flex;gap:34px;flex-wrap:wrap;align-items:flex-end;
+  border-top:1px solid var(--hair);padding-top:24px;max-width:900px}
+.hsub .l{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}
+.hsub .v{font-size:1.05rem;font-weight:400}
+.claim{margin-top:44px;max-width:700px;font-size:clamp(1.1rem,2vw,1.55rem);line-height:1.48;font-weight:300;color:rgba(237,239,247,.82)}
+.claim b{font-weight:500;color:var(--ink);position:relative}
+.claim b:after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:var(--grad)}
+.orb{position:absolute;pointer-events:none;z-index:-1;will-change:transform}
+.orb img{width:100%;height:auto;display:block}
+#o1{width:clamp(180px,26vw,420px);top:2%;right:3%;filter:drop-shadow(0 0 90px rgba(255,124,102,.45))}
+#o2{width:clamp(90px,11vw,180px);bottom:14%;right:26%;filter:drop-shadow(0 0 60px rgba(38,229,255,.35))}
+#o3{width:clamp(120px,16vw,260px);bottom:-6%;left:-5%;opacity:.5;filter:drop-shadow(0 0 70px rgba(123,97,255,.4))}
+.scrollcue{position:absolute;bottom:34px;left:6vw;display:flex;align-items:center;gap:12px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--faint);text-transform:uppercase}
+.scrollcue i{width:1px;height:34px;background:linear-gradient(var(--cyan),transparent);animation:drop 1.9s ease-in-out infinite}
+@keyframes drop{0%,100%{transform:scaleY(.35);opacity:.4;transform-origin:top}50%{transform:scaleY(1);opacity:1;transform-origin:top}}
+@media(max-width:820px){.scrollcue{left:24px}}
+
+/* ═══ TICKER ═══ */
+.ticker{border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:20px 0;overflow:hidden;
+  position:relative;z-index:5;margin-top:2vh;background:rgba(255,255,255,.012)}
+.ticker .run{display:flex;gap:56px;width:max-content;animation:run 42s linear infinite}
+.ticker:hover .run{animation-play-state:paused}
+@keyframes run{to{transform:translateX(-50%)}}
+.ticker span{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.ticker span b{color:var(--cyan);font-weight:400;margin-right:12px}
+
+/* ═══ STATS ═══ */
+#stats{padding:14vh 0 12vh}
+.srow{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;border:1px solid var(--hair)}
+@media(max-width:900px){.srow{grid-template-columns:repeat(2,1fr)}}
+.scell{padding:38px 28px;position:relative;overflow:hidden;background:rgba(255,255,255,.015);transition:background .4s}
+.scell:hover{background:rgba(255,255,255,.045)}
+.scell:before{content:"";position:absolute;top:0;left:0;height:1px;width:0;background:var(--grad);transition:width .8s cubic-bezier(.2,.9,.2,1)}
+.scell.in:before{width:100%}
+.scell .n{font-size:clamp(2.6rem,5.4vw,4.6rem);font-weight:700;letter-spacing:-.05em;line-height:1}
+.scell .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-top:14px;line-height:1.6}
+
+/* ═══ WORK ═══ */
+section.w{padding:12vh 0;position:relative}
+.ghost{position:absolute;top:6vh;right:2vw;font-size:clamp(9rem,26vw,24rem);font-weight:700;line-height:.7;
+  color:rgba(237,239,247,.028);letter-spacing:-.06em;pointer-events:none;z-index:0;user-select:none}
+.wg{display:grid;grid-template-columns:1.35fr 1fr;gap:5vw;align-items:center;position:relative;z-index:3}
+section.w.flip .wg{grid-template-columns:1fr 1.35fr}
+section.w.flip .media{order:-1}
+@media(max-width:1000px){.wg,section.w.flip .wg{grid-template-columns:1fr;gap:38px}
+  section.w.flip .media{order:0}}
+.idx{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--cyan);
+  display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.idx:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--cyan),transparent);max-width:150px}
+h2{font-size:clamp(2rem,4.4vw,4rem);font-weight:700;letter-spacing:-.04em;line-height:1;margin-bottom:20px}
+.sub{font-size:1.02rem;color:var(--mute);line-height:1.55;padding-bottom:26px;border-bottom:1px solid var(--hair);margin-bottom:28px;max-width:560px}
+ul{list-style:none;max-width:580px}
+ul li{font-size:.99rem;line-height:1.6;padding:0 0 18px 30px;position:relative;color:rgba(237,239,247,.80);
+  opacity:0;transform:translateX(-14px);transition:opacity .7s,transform .7s}
+ul li.in{opacity:1;transform:none}
+ul li:before{content:"";position:absolute;left:0;top:.62em;width:16px;height:1px;background:var(--grad)}
+ul li b{font-weight:500;color:var(--ink)}
+.stamp{margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--faint)}
+.stamp a{color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(38,229,255,.35)}
+
+/* media panel */
+.media{perspective:1400px}
+.frame{position:relative;border:1px solid var(--hair);overflow:hidden;background:#0a0a12;
+  transform-style:preserve-3d;transition:transform .18s ease-out,box-shadow .5s;
+  box-shadow:0 40px 100px -40px rgba(0,0,0,.9)}
+.frame:hover{box-shadow:0 50px 120px -40px rgba(123,97,255,.5),0 0 0 1px rgba(38,229,255,.28)}
+.frame img{display:block;width:100%;height:auto}
+.frame:after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(160deg,rgba(255,255,255,.10),transparent 34%);opacity:.7}
+.chip{position:absolute;top:13px;left:13px;z-index:4;font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:.18em;text-transform:uppercase;padding:6px 11px;color:var(--faint);
+  background:rgba(5,5,9,.7);backdrop-filter:blur(10px);border:1px solid var(--hair);display:flex;align-items:center;gap:8px}
+.chip i{width:5px;height:5px;border-radius:50%;background:var(--faint);display:block}
+.frame.live .chip{color:var(--lime);border-color:rgba(184,255,61,.3)}
+.frame.live .chip i{background:var(--lime);box-shadow:0 0 10px var(--lime);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.cap{margin-top:13px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;color:var(--faint);line-height:1.6}
+
+/* ═══ TIMELINE ═══ */
+#time{padding:14vh 0}
+.tl{position:relative;margin-top:60px;padding-left:2px}
+.tl:before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--hair)}
+.tl i.fill{position:absolute;left:0;top:0;width:1px;height:0;background:var(--grad);box-shadow:0 0 14px var(--cyan);transition:height .2s linear}
+.ev{position:relative;padding:0 0 46px 46px;opacity:0;transform:translateY(18px);transition:.7s}
+.ev.in{opacity:1;transform:none}
+.ev:before{content:"";position:absolute;left:-4px;top:6px;width:9px;height:9px;border-radius:50%;
+  background:var(--void);border:1px solid var(--faint);transition:.4s}
+.ev.in:before{border-color:var(--cyan);background:var(--cyan);box-shadow:0 0 16px var(--cyan)}
+.ev .m{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:7px}
+.ev .h{font-size:1.15rem;font-weight:500;margin-bottom:5px}
+.ev .d{font-size:.92rem;color:var(--mute);line-height:1.55;max-width:620px}
+
+/* ═══ META ═══ */
+#meta{padding:16vh 0 10vh;position:relative}
+.big{font-size:clamp(2.2rem,6.5vw,6rem);font-weight:700;letter-spacing:-.045em;line-height:.98;max-width:16ch}
+.lead{margin-top:38px;max-width:760px;font-size:clamp(1.05rem,1.9vw,1.45rem);line-height:1.5;color:rgba(237,239,247,.8)}
+.lead b{color:var(--ink);font-weight:500}
+.spec{margin-top:70px;border:1px solid var(--hair);background:rgba(255,255,255,.015)}
+.spec .sh{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--hair);
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+.spec .sh b{color:var(--lime);font-weight:400;display:flex;align-items:center;gap:8px}
+.spec .sh b:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:pulse 1.6s infinite}
+.spec dl{display:grid;grid-template-columns:repeat(3,1fr)}
+@media(max-width:820px){.spec dl{grid-template-columns:1fr}}
+.spec div.r{padding:22px 20px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.spec dt{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
+.spec dd{font-size:1.35rem;font-weight:500;letter-spacing:-.02em}
+.spec dd em{font-style:normal;font-size:.8rem;color:var(--mute);font-weight:300;margin-left:5px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:46px;margin-top:80px}
+@media(max-width:900px){.three{grid-template-columns:1fr;gap:34px}}
+.three h3{font-size:1rem;font-weight:500;padding-bottom:13px;margin-bottom:15px;border-bottom:1px solid var(--hair);position:relative}
+.three h3:after{content:"";position:absolute;left:0;bottom:-1px;width:38px;height:1px;background:var(--grad)}
+.three p{font-size:.94rem;line-height:1.68;color:var(--mute)}
+.kick{margin-top:12vh;padding-top:46px;border-top:1px solid var(--hair);
+  font-size:clamp(1.5rem,4vw,3.2rem);font-weight:700;letter-spacing:-.035em;line-height:1.14;max-width:19ch}
+.attrib{margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);line-height:1.9;max-width:640px;letter-spacing:.03em}
+
+footer{padding:8vh 0 10vh;border-top:1px solid var(--hair);display:flex;justify-content:space-between;gap:26px;flex-wrap:wrap;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);line-height:2}
+footer b{color:var(--mute);font-weight:400}
+
+/* ═══ PRESENTER ═══ */
+#pres{position:fixed;inset:auto 0 0 0;z-index:600;background:rgba(6,6,12,.93);backdrop-filter:blur(20px);
+  border-top:1px solid var(--cyan);padding:24px 6vw 28px;transform:translateY(103%);
+  transition:transform .45s cubic-bezier(.2,.9,.2,1);max-height:42vh;overflow-y:auto;box-shadow:0 -30px 80px rgba(0,0,0,.8)}
+#pres.up{transform:none}
+#pres .ph{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:14px;display:flex;justify-content:space-between;gap:20px}
+#ptext{font-size:1.04rem;line-height:1.65;max-width:920px;color:rgba(237,239,247,.9)}
+#ptext em{font-style:normal;color:var(--cyan)}
+#hint{position:fixed;right:24px;bottom:20px;z-index:450;font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--faint);border:1px solid var(--hair);
+  padding:9px 13px;background:rgba(5,5,9,.7);backdrop-filter:blur(10px);transition:.3s}
+#hint kbd{color:var(--cyan);border:1px solid rgba(38,229,255,.3);padding:1px 5px;margin:0 2px;font-family:inherit}
+@media(max-width:820px){#hint{display:none}#pres{padding:20px 24px 24px}}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .85s cubic-bezier(.2,.9,.2,1),transform .85s cubic-bezier(.2,.9,.2,1)}
+.rv.in{opacity:1;transform:none}
+</style>
+</head>
+<body class="booting">
+
+<div id="aurora"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
+<div id="grid"></div>
+<div id="vig"></div>
+<div id="noise"></div>
+<div id="cdot"></div><div id="cring"></div>
+<div id="prog"></div>
+
+<!-- ═══ BOOT ═══ -->
+<div id="boot">
+  <p class="mono"><b>›</b> initializing container … <b>html/1</b> · no framework · no build step</p>
+  <p class="mono"><b>›</b> loading artifacts … <b>6</b> deliverables · <b>4</b> magic quadrant submissions</p>
+  <p class="mono"><b>›</b> resolving method … one pattern, five reuses</p>
+  <p class="mono ok"><b>✓</b> FY27 // MIKE PRICE — ready</p>
+  <div id="bootbar"><i></i></div>
+</div>
+
+<nav id="rail">
+  <a href="#hero"><span class="tk"></span><span class="lb">Open</span></a>
+  <a href="#stats"><span class="tk"></span><span class="lb">The year</span></a>
+  <a href="#s1"><span class="tk"></span><span class="lb">Magic Quadrant</span></a>
+  <a href="#s2"><span class="tk"></span><span class="lb">Whiteboard</span></a>
+  <a href="#s3"><span class="tk"></span><span class="lb">Sales plays</span></a>
+  <a href="#s4"><span class="tk"></span><span class="lb">London</span></a>
+  <a href="#s5"><span class="tk"></span><span class="lb">Jellyvision</span></a>
+  <a href="#s6"><span class="tk"></span><span class="lb">Cal State</span></a>
+  <a href="#time"><span class="tk"></span><span class="lb">Timeline</span></a>
+  <a href="#meta"><span class="tk"></span><span class="lb">The method</span></a>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero" class="wrap" data-pres="Start with the format, not the content. You're not looking at slides — this is the same container pattern that carried the whiteboard asset, the London stations and the SAP lab, pointed at itself. <em>The medium is the first exhibit.</em>">
+  <div class="orb" id="o1"><img src="assets/orb-a.png" alt=""></div>
+  <div class="orb" id="o2"><img src="assets/orb-b.png" alt=""></div>
+  <div class="orb" id="o3"><img src="assets/orb-cluster.png" alt=""></div>
+
+  <div class="tag mono">Domain Expert Team · February — August 2026</div>
+  <h1><span class="gradtext wipe">FY27</span><br><span data-split>WORK</span></h1>
+  <div class="hsub">
+    <div><div class="l mono">Operator</div><div class="v">Mike Price</div></div>
+    <div><div class="l mono">Function</div><div class="v">Domain Expert · Boomi</div></div>
+    <div><div class="l mono">Output</div><div class="v">Six shipped deliverables</div></div>
+  </div>
+  <p class="claim">Everything here shipped as <b>something that runs</b> — not something that describes what would run. Including the page you're reading.</p>
+  <div class="scrollcue mono"><i></i> Scroll</div>
+</section>
+
+<div class="ticker">
+  <div class="run" id="run"></div>
+</div>
+
+<!-- ═══ STATS ═══ -->
+<section id="stats" class="wrap" data-pres="Four numbers, and only one of them is about volume. <em>The last one is the argument</em> — one method underneath all of it, which is why the sixth deliverable took ten days instead of ten weeks.">
+  <div class="tag mono rv">01 — The year in four numbers</div>
+  <div class="srow">
+    <div class="scell"><div class="n gradtext" data-count="4">0</div><div class="k mono">Magic Quadrant<br>submissions</div></div>
+    <div class="scell"><div class="n gradtext" data-count="6">0</div><div class="k mono">Field-ready<br>deliverables</div></div>
+    <div class="scell"><div class="n gradtext" data-count="12" data-suffix="th">0</div><div class="k mono">Consecutive year<br>as iPaaS Leader</div></div>
+    <div class="scell"><div class="n gradtext" data-count="1">0</div><div class="k mono">Repeatable method<br>behind all of it</div></div>
+  </div>
+</section>
+
+<!-- ═══ 01 ═══ -->
+<section class="w wrap" id="s1" data-pres="Lead with the outcome, not the effort. Twelfth consecutive year as a Leader. Then the shift that actually matters — on Data Integration I stopped coordinating other people's environments and built the platform demo myself. <em>That's the line between running a project and owning a capability.</em>">
+  <div class="ghost">01</div>
+  <div class="wg">
+    <div>
+      <div class="idx mono">01 / Gartner</div>
+      <h2 class="rv" data-scramble>Magic Quadrant Demos</h2>
+      <p class="sub rv">Led the demo team across four submissions — iPaaS, Master Data Management, API Management, and Data Integration Tools.</p>
+      <ul>
+        <li>iPaaS submission contributed to Boomi's <b>12th consecutive year as a Leader</b>, positioned highest for Ability to Execute</li>
+        <li>Owned criteria analysis, gap mapping, demo script and narration <b>end to end</b></li>
+        <li>Data Integration is the first submission running on a <b>working platform demo I built myself</b> — with Companion, of course</li>
+      </ul>
+      <div class="stamp mono rv">Nov 2025 — Aug 2026 · Recorded submissions</div>
+    </div>
+    <div class="media rv">
+      <div class="frame tilt"><span class="chip mono"><i></i>Recorded submission</span>
+        <img data-gif="assets/01-mq.gif" src="assets/01-mq-poster.jpg" alt="Magic Quadrant demo">
+      </div>
+      <div class="cap">Long-form demos mapped criterion by criterion to Gartner's evaluation model.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 02 ═══ -->
+<section class="w wrap flip" id="s2" data-pres="This is the reception moment. A VP of Presales asked to push it to all of sales; the regional lead's first reaction was that it could be re-voiced for Japan. But the line to land is the third bullet — <em>the method outlived the asset.</em> The skill that built this went into MQ production two weeks later.">
+  <div class="ghost">02</div>
+  <div class="wg">
+    <div>
+      <div class="idx mono">02 / Highspot</div>
+      <h2 class="rv" data-scramble>Data Management Whiteboard</h2>
+      <p class="sub rv">A whiteboard talk track rebuilt as a narrated, self-serve digital asset.</p>
+      <ul>
+        <li>Built from a source recording — <b>seven chapters</b>, narration timed frame-by-frame to the animation</li>
+        <li>Live in Highspot with a rep guide, structured so it can be <b>re-voiced in any language</b></li>
+        <li>The build method became a <b>reusable skill</b>, already applied to MQ demo production</li>
+      </ul>
+      <div class="stamp mono rv">Published 29 Jul 2026 · Runtime 6:41</div>
+    </div>
+    <div class="media rv">
+      <div class="frame tilt"><span class="chip mono"><i></i>Narrated animation</span>
+        <img data-gif="assets/02-whiteboard.gif" src="assets/02-whiteboard-poster.jpg" alt="Whiteboard animation">
+      </div>
+      <div class="cap">Hand-drawn source material, re-timed and narrated end to end.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 03 ═══ -->
+<section class="w wrap" id="s3" data-pres="The point isn't the individual assets — it's that the play now arrives complete. Page, script, demo, cheat sheet, all at launch. Four VPs found the Boomi for SAP page inside a month. <em>And the package format itself is now the team's template.</em>">
+  <div class="ghost">03</div>
+  <div class="wg">
+    <div>
+      <div class="idx mono">03 / Enablement</div>
+      <h2 class="rv" data-scramble>Sales Play Support</h2>
+      <p class="sub rv">Assets and Highspot infrastructure that ship with the play, not after it.</p>
+      <ul>
+        <li><b>Boomi for SAP:</b> install lab in Flow, Highspot product page, SDR script and cheat sheet</li>
+        <li><b>Data Hub and BDI attach:</b> refreshed executive demo, clickable, and full enablement package</li>
+        <li>Built the <b>reusable play package format</b> now applied across the team's plays</li>
+      </ul>
+      <div class="stamp mono rv">Mar — Jul 2026 · Highspot product pages</div>
+    </div>
+    <div class="media rv">
+      <div class="frame tilt"><span class="chip mono"><i></i>Highspot infrastructure</span>
+        <img data-gif="assets/03-salesplays.gif" src="assets/03-salesplays-poster.jpg" alt="Sales play pages">
+      </div>
+      <div class="cap">Product pages, install simulator and enablement packages as one delivery.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 04 ═══ -->
+<section class="w wrap flip" id="s4" data-pres="The proof point is that nobody had to present it. Attendees walked up and drove it themselves — a different bar than a staffed booth. <em>APJ asked for a Sydney build before the London floor had closed.</em>">
+  <div class="ghost">04</div>
+  <div class="wg">
+    <div>
+      <div class="idx mono">04 / Event</div>
+      <h2 class="rv" data-scramble>Boomi World London</h2>
+      <p class="sub rv">Self-serve demo stations attendees ran themselves.</p>
+      <ul>
+        <li><b>Four customized use case scenarios</b> as animated clickable experiences</li>
+        <li>Designed the format, built the assets, and staffed and maintained the stations on-site</li>
+        <li>Will be <b>replicated for Sydney</b> at APJ's request</li>
+      </ul>
+      <div class="stamp mono rv">Jun 2026 · Boomi World Tour London</div>
+    </div>
+    <div class="media rv">
+      <div class="frame tilt"><span class="chip mono"><i></i>Walk-up experience</span>
+        <img data-gif="assets/04-bwt.gif" src="assets/04-bwt-poster.jpg" alt="London hands-on experience">
+      </div>
+      <div class="cap">Chromebook stations beside the demo booths. No presenter required.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 05 ═══ -->
+<section class="w wrap" id="s5" data-pres="This one I sourced myself, off a personal relationship, against a real opportunity — then built the whole package and handed it over finished. The line that travels: <em>we showed them their product, not our canvas.</em>">
+  <div class="ghost">05</div>
+  <div class="wg">
+    <div>
+      <div class="idx mono">05 / Pipeline</div>
+      <h2 class="rv" data-scramble>Jellyvision</h2>
+      <p class="sub rv">Opportunity support and demo build — <a href="https://boomi.to/jellyvision" style="color:var(--cyan);text-decoration:none;border-bottom:1px solid rgba(38,229,255,.35)">boomi.to/jellyvision</a></p>
+      <ul>
+        <li><b>Sourced the opportunity</b> and built a full platform demo against a real OEM use case</li>
+        <li>Carrier coverage reconciliation shown as a working product experience, <b>not an integration canvas</b></li>
+        <li>Packaged with exec summary, runbook and account team briefing, then handed to the rep and SE</li>
+      </ul>
+      <div class="stamp mono rv">Jul — Aug 2026 · Live OEM opportunity</div>
+    </div>
+    <div class="media rv">
+      <div class="frame tilt"><span class="chip mono"><i></i>Live opportunity</span>
+        <img data-gif="assets/05-jellyvision.gif" src="assets/05-jellyvision-poster.jpg" alt="Jellyvision demo">
+      </div>
+      <div class="cap">Built in the presales account, packaged for handoff, presented at All Hands.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 06 ═══ -->
+<section class="w wrap flip" id="s6" data-pres="Ten days from storyboard to a live customer webinar in front of hundreds of attendees — and it shipped with everything someone else needs to run it without me. <em>That's the difference between a demo and an asset.</em>">
+  <div class="ghost">06</div>
+  <div class="wg">
+    <div>
+      <div class="idx mono">06 / Customer</div>
+      <h2 class="rv" data-scramble>Cal State University</h2>
+      <p class="sub rv">Presented as part of CSU's "AI in July" web series.</p>
+      <ul>
+        <li>CSU-branded Flow portal with <b>live file upload through MFT</b> into four Boomi processes</li>
+        <li>Delivered to <b>hundreds of CSU prospects and customers</b> at the AI in July event</li>
+        <li>Shipped with a Navattic clickable, demo guide, one-pager and slides so anyone can run it</li>
+      </ul>
+      <div class="stamp mono rv">Jul 2026 · Ten days storyboard → customer call</div>
+    </div>
+    <div class="media rv">
+      <div class="frame tilt"><span class="chip mono"><i></i>Day in the life</span>
+        <img data-gif="assets/06-csu.gif" src="assets/06-csu-poster.jpg" alt="Cal State demo">
+      </div>
+      <div class="cap">Front-end first. The integration canvas never appears.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TIMELINE ═══ -->
+<section id="time" class="wrap" data-pres="Worth pausing on the shape of this. The gap between projects gets shorter as the year goes on, and that isn't effort — <em>it's compounding tooling.</em> Each build left something behind that made the next one cheaper.">
+  <div class="tag mono rv">07 — Seven months, compounding</div>
+  <h2 class="rv" style="max-width:16ch">The gap between builds kept shrinking</h2>
+  <div class="tl">
+    <i class="fill"></i>
+    <div class="ev"><div class="m mono">Feb 2026</div><div class="h">Domain Expert Team</div><div class="d">Joined. Demo operations and inherited demo inventory.</div></div>
+    <div class="ev"><div class="m mono">Mar 2026</div><div class="h">iPaaS MQ result lands</div><div class="d">12th consecutive year as a Leader. Written review asks Boomi to standardize demo development — with me at the center of it.</div></div>
+    <div class="ev"><div class="m mono">Apr — May 2026</div><div class="h">Sales plays and the team portal</div><div class="d">Authored play frameworks, built the Domain Expert portal in Flow behind SSO. First time the platform we sell became the delivery mechanism.</div></div>
+    <div class="ev"><div class="m mono">Jun 2026</div><div class="h">The pattern gets named</div><div class="d">HTML wrapping the live artifact instead of the reverse. Proven on the Data Hub refresh, deployed at Boomi World London days later.</div></div>
+    <div class="ev"><div class="m mono">Jun — Jul 2026</div><div class="h">APIM MQ · SAP lab · Whiteboard</div><div class="d">Three deliverables in six weeks, all on the same container. The whiteboard build becomes a reusable skill.</div></div>
+    <div class="ev"><div class="m mono">Jul 2026</div><div class="h">Cal State University</div><div class="d">Ten days from storyboard to a live customer webinar. The method is now faster than the meeting cadence around it.</div></div>
+    <div class="ev"><div class="m mono">Aug 2026</div><div class="h">Data Integration MQ · Jellyvision</div><div class="d">A Gartner submission running on a platform demo built independently, and a sourced OEM opportunity packaged for handoff.</div></div>
+  </div>
+</section>
+
+<!-- ═══ META ═══ -->
+<section id="meta" class="wrap" data-pres="Close on the format. Everything above was delivered this way — and so was this. The page is the seventh artifact, and the panel below is reading its own real numbers live in your browser. <em>Arrive at a deliverable, leave behind a method.</em>">
+  <div class="tag mono rv">08 — And this page is one of them</div>
+  <h2 class="big rv">A deck would have flattened all of this into screenshots</h2>
+  <p class="lead rv">This page runs the <b>same container pattern</b> as the whiteboard asset, the London stations and the SAP install lab — pointed at itself. The panel below isn't a claim. It's this document measuring itself, live, in your browser.</p>
+
+  <div class="spec rv">
+    <div class="sh mono"><span>Live self-report · runtime telemetry</span><b>measuring</b></div>
+    <dl>
+      <div class="r"><dt class="mono">Files to deploy</dt><dd id="m1">1 <em>+ assets</em></dd></div>
+      <div class="r"><dt class="mono">JS dependencies</dt><dd id="m2">0</dd></div>
+      <div class="r"><dt class="mono">Build step</dt><dd id="m3">none</dd></div>
+      <div class="r"><dt class="mono">Time to interactive</dt><dd id="m4">—</dd></div>
+      <div class="r"><dt class="mono">DOM nodes rendered</dt><dd id="m5">—</dd></div>
+      <div class="r"><dt class="mono">Your viewport</dt><dd id="m6">—</dd></div>
+      <div class="r"><dt class="mono">Motion assets streamed</dt><dd id="m7">0 <em>of 6</em></dd></div>
+      <div class="r"><dt class="mono">Session dwell</dt><dd id="m8">—</dd></div>
+      <div class="r"><dt class="mono">Distribution</dt><dd>1 URL</dd></div>
+    </dl>
+  </div>
+
+  <div class="three">
+    <div class="rv">
+      <h3>One technique, five deliverables</h3>
+      <p>HTML wrapping the live artifact instead of the reverse. Invented for the Data Hub refresh in June, then reused for Boomi World London, the SAP install lab, the whiteboard, and this.</p>
+    </div>
+    <div class="rv">
+      <h3>Built on the platform we sell</h3>
+      <p>The portal work runs in Flow behind Boomi SSO. Front-ending content from other systems is the argument — and simultaneously the demonstration of it.</p>
+    </div>
+    <div class="rv">
+      <h3>It updates without redistribution</h3>
+      <p>No version decaying in someone's downloads folder. One URL, linked from Highspot, correct the moment it changes.</p>
+    </div>
+  </div>
+
+  <p class="kick rv">Every project this year ended the same way: a deliverable shipped, and a <span class="gradtext">method left behind</span> that made the next one faster.</p>
+  <p class="attrib mono rv">That pattern was named for me before I'd noticed it myself — in a March review asking Boomi to build a repeatable, standardized approach to demo development, with me at the center of it. Six deliverables later, this is what that looks like.</p>
+</section>
+
+<footer class="wrap">
+  <div><b>Mike Price</b><br>Domain Expert Team · Boomi</div>
+  <div><b>FY27</b><br>Feb — Aug 2026</div>
+  <div><b>This page</b><br>One container · zero dependencies</div>
+  <div><b>Press P</b><br>Presenter notes</div>
+</footer>
+
+<div id="pres"><div class="ph mono"><span>Presenter notes</span><span>P to close · ↑ ↓ to move</span></div><div id="ptext"></div></div>
+<div id="hint" class="mono">Press <kbd>P</kbd> for presenter notes · <kbd>↑</kbd><kbd>↓</kbd> navigate</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,c){return (c||document).querySelector(s)},
+    $$=function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
+
+/* ── BOOT ── */
+var bootLines=$$('#boot p');
+bootLines.forEach(function(p,i){setTimeout(function(){p.classList.add('on')},170+i*230)});
+setTimeout(function(){
+  $('#boot').classList.add('gone');
+  document.body.classList.remove('booting');
+  $('h1').classList.add('go');
+},1950);
+
+/* ── SPLIT HEADLINE ── */
+$$('[data-split]').forEach(function(el){
+  var t=el.textContent;el.textContent='';
+  t.split('').forEach(function(c,i){
+    var s=document.createElement('span');
+    s.className='ch';s.textContent=c;s.style.transitionDelay=(i*55+120)+'ms';
+    el.appendChild(s);
+  });
+});
+
+/* ── TICKER ── */
+var words=['Gartner Magic Quadrant','Highspot','Boomi Flow','Navattic','Managed File Transfer','Boomi Companion',
+'Data Hub','Agentstudio','Day-in-the-life demos','Boomi World London','Cal State University','OEM pipeline',
+'Reusable skills','Install labs','Narrated animation','API Management'];
+var runHtml=words.map(function(w){return '<span><b>◆</b>'+w+'</span>'}).join('');
+$('#run').innerHTML=runHtml+runHtml;
+
+/* ── CURSOR ── */
+var dot=$('#cdot'),ring=$('#cring'),mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+addEventListener('mousemove',function(e){
+  mx=e.clientX;my=e.clientY;
+  dot.style.transform='translate('+mx+'px,'+my+'px)';
+  document.documentElement.style.setProperty('--mx',(mx/innerWidth*100)+'%');
+  document.documentElement.style.setProperty('--my',(my/innerHeight*100)+'%');
+});
+(function loop(){rx+=(mx-rx)*.16;ry+=(my-ry)*.16;
+  ring.style.transform='translate('+rx+'px,'+ry+'px)';requestAnimationFrame(loop)})();
+$$('a,.frame,.scell,.ev').forEach(function(el){
+  el.addEventListener('mouseenter',function(){ring.classList.add('big')});
+  el.addEventListener('mouseleave',function(){ring.classList.remove('big')});
+});
+
+/* ── ORB PARALLAX ── */
+var orbs=[{el:$('#o1'),d:.42,r:4.2},{el:$('#o2'),d:-.66,r:-6.0},{el:$('#o3'),d:.28,r:2.4}];
+var pxr=0,pyr=0,tpx=0,tpy=0;
+addEventListener('mousemove',function(e){
+  tpx=(e.clientX/innerWidth-.5);tpy=(e.clientY/innerHeight-.5);
+},{passive:true});
+(function orbLoop(){
+  pxr+=(tpx-pxr)*.06; pyr+=(tpy-pyr)*.06;
+  var y=scrollY;
+  orbs.forEach(function(o){
+    if(!o.el)return;
+    o.el.style.transform='translate3d('+(pxr*120*o.d)+'px,'+(pyr*120*o.d - y*o.d*.22)+'px,0) rotate('+(pxr*o.r)+'deg)';
+  });
+  requestAnimationFrame(orbLoop);
+})();
+
+/* ── REVEAL ── */
+var rvo=new IntersectionObserver(function(es){es.forEach(function(e){
+  if(e.isIntersecting){e.target.classList.add('in');rvo.unobserve(e.target)}})},{threshold:.15});
+$$('.rv,.scell,.ev').forEach(function(e){rvo.observe(e)});
+
+/* staggered bullets */
+var lio=new IntersectionObserver(function(es){es.forEach(function(e){
+  if(e.isIntersecting){
+    $$('li',e.target).forEach(function(li,i){setTimeout(function(){li.classList.add('in')},i*130)});
+    lio.unobserve(e.target);
+  }})},{threshold:.25});
+$$('section.w ul').forEach(function(u){lio.observe(u)});
+
+/* ── SCRAMBLE ── */
+var GLY='ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&/\\<>*+=';
+function scramble(el){
+  var final=el.dataset.txt||el.textContent;el.dataset.txt=final;
+  var len=final.length,frame=0,queue=[];
+  for(var i=0;i<len;i++){queue.push({c:final[i],start:Math.floor(Math.random()*16),end:Math.floor(Math.random()*16)+16})}
+  (function tick(){
+    var out='',done=0;
+    for(var i=0;i<queue.length;i++){var q=queue[i];
+      if(frame>=q.end){done++;out+=q.c}
+      else if(frame>=q.start){out+= q.c===' '?' ':GLY[Math.floor(Math.random()*GLY.length)]}
+      else{out+=q.c===' '?' ':''}
+    }
+    el.textContent=out;
+    if(done<queue.length){frame++;requestAnimationFrame(tick)}else{el.textContent=final}
+  })();
+}
+var sco=new IntersectionObserver(function(es){es.forEach(function(e){
+  if(e.isIntersecting){scramble(e.target);sco.unobserve(e.target)}})},{threshold:.4});
+$$('[data-scramble]').forEach(function(e){sco.observe(e)});
+
+/* ── COUNT UP ── */
+var cno=new IntersectionObserver(function(es){es.forEach(function(e){
+  if(!e.isIntersecting)return;
+  var el=e.target,to=+el.dataset.count,suf=el.dataset.suffix||'',t0=null;
+  requestAnimationFrame(function step(t){
+    if(!t0)t0=t;var p=Math.min((t-t0)/1200,1);
+    var eased=1-Math.pow(1-p,3);
+    el.textContent=Math.round(eased*to)+(p===1?suf:'');
+    if(p<1)requestAnimationFrame(step);
+  });
+  cno.unobserve(el);
+})},{threshold:.6});
+$$('[data-count]').forEach(function(e){cno.observe(e)});
+
+/* ── 3D TILT ── */
+$$('.tilt').forEach(function(f){
+  f.addEventListener('mousemove',function(e){
+    var r=f.getBoundingClientRect();
+    var px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+    f.style.transform='rotateY('+(px*11)+'deg) rotateX('+(-py*11)+'deg) translateZ(24px) scale(1.015)';
+  });
+  f.addEventListener('mouseleave',function(){f.style.transform=''});
+});
+
+/* ── GIF STREAMING + telemetry ── */
+var streamed=0;
+var gio=new IntersectionObserver(function(es){es.forEach(function(e){
+  if(!e.isIntersecting)return;
+  var img=$('img[data-gif]',e.target);
+  if(!img||img.dataset.done)return;
+  img.dataset.done='1';
+  var g=new Image();
+  g.onload=function(){
+    img.src=img.dataset.gif;
+    e.target.classList.add('live');
+    var c=$('.chip',e.target); if(c) c.innerHTML='<i></i>Playing';
+    streamed++; var m7=$('#m7'); if(m7) m7.innerHTML=streamed+' <em>of 6</em>';
+  };
+  g.src=img.dataset.gif;
+})},{threshold:.3});
+$$('.frame').forEach(function(f){gio.observe(f)});
+
+/* ── TIMELINE FILL ── */
+var tl=$('.tl'),fill=$('.tl .fill');
+addEventListener('scroll',function(){
+  if(!tl)return;
+  var r=tl.getBoundingClientRect();
+  var p=Math.min(Math.max((innerHeight*.72-r.top)/r.height,0),1);
+  fill.style.height=(p*100)+'%';
+},{passive:true});
+
+/* ── RAIL + PROGRESS + PRESENTER ── */
+var secs=$$('section[data-pres]'),links=$$('#rail a'),cur=0,on=false;
+var pres=$('#pres'),ptext=$('#ptext'),hint=$('#hint');
+function setCur(i){
+  if(i===cur)return;cur=i;
+  links.forEach(function(l,j){l.classList.toggle('on',j===i)});
+  if(on)ptext.innerHTML=secs[i].dataset.pres||'';
+}
+var ao=new IntersectionObserver(function(es){es.forEach(function(e){
+  if(e.isIntersecting)setCur(secs.indexOf(e.target))})},{rootMargin:'-45% 0px -45% 0px'});
+secs.forEach(function(s){ao.observe(s)});
+links[0].classList.add('on');
+
+addEventListener('scroll',function(){
+  var h=document.documentElement.scrollHeight-innerHeight;
+  $('#prog').style.width=(scrollY/h*100)+'%';
+},{passive:true});
+
+addEventListener('keydown',function(e){
+  var k=e.key.toLowerCase();
+  if(k==='p'){on=!on;pres.classList.toggle('up',on);hint.style.opacity=on?'0':'1';
+    if(on)ptext.innerHTML=secs[cur].dataset.pres||''}
+  if(k==='escape'&&on){on=false;pres.classList.remove('up');hint.style.opacity='1'}
+  if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();
+    if(cur<secs.length-1)secs[cur+1].scrollIntoView({behavior:'smooth'})}
+  if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();
+    if(cur>0)secs[cur-1].scrollIntoView({behavior:'smooth'})}
+});
+
+/* ── LIVE SELF-REPORT ── */
+var t0=performance.now();
+function telemetry(){
+  var tti=Math.round(performance.now());
+  try{
+    var nav=performance.getEntriesByType('navigation')[0];
+    if(nav&&nav.domContentLoadedEventEnd)tti=Math.round(nav.domContentLoadedEventEnd);
+  }catch(err){}
+  var m4=$('#m4'); if(m4)m4.innerHTML=tti+' <em>ms</em>';
+  var m5=$('#m5'); if(m5)m5.textContent=document.getElementsByTagName('*').length.toLocaleString();
+  var m6=$('#m6'); if(m6)m6.innerHTML=innerWidth+' × '+innerHeight+' <em>px</em>';
+}
+telemetry();
+addEventListener('resize',function(){var m6=$('#m6');if(m6)m6.innerHTML=innerWidth+' × '+innerHeight+' <em>px</em>'});
+var start=Date.now();
+setInterval(function(){
+  var s=Math.floor((Date.now()-start)/1000);
+  var m8=$('#m8'); if(m8)m8.innerHTML=(s<60? s+' <em>sec</em>' : Math.floor(s/60)+'<em>m</em> '+(s%60)+'<em>s</em>');
+},1000);
+})();
+</script>
+</body>
+</html>
