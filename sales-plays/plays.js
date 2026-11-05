@@ -89,7 +89,8 @@ window.PLAYS = [
     icon: "assets/icon-bdi.png",
     keywords: "bdi provisioning data integration rivery agentstudio agent studio banner upsell base qualify new logo",
     assets: [
-      { type: "deck", title: "BDI GTM enablement deck", url: "https://docs.google.com/presentation/d/1iPW6Ihv38ToAPz4Y2sZJbqFyT5jw5NVVsC9BS5ruwR8/edit?usp=sharing" }
+      { type: "deck", title: "BDI GTM enablement deck", url: "https://docs.google.com/presentation/d/1iPW6Ihv38ToAPz4Y2sZJbqFyT5jw5NVVsC9BS5ruwR8/edit?usp=sharing" },
+      { type: "clickable", title: "BDI clickable demo", url: "https://boomi.highspot.com/items/6ab133b307dc97113a379ac2" }
     ]
   },
   {
@@ -112,7 +113,7 @@ window.PLAYS = [
     title: "Meta Hub",
     summary: "Unify and govern metadata to create trusted, connected data for analytics and AI.",
     products: ["Meta Hub"],
-    icon: "assets/icon-metahub.png",
+    icon: "assets/icon-metahub.svg",
     keywords: "metadata catalog governance lineage analytics ai data management",
     assets: []
   },
@@ -134,7 +135,7 @@ window.PLAYS = [
     title: "Knowledge Hub",
     summary: "Unify enterprise knowledge to deliver trusted, AI-ready information that powers agents.",
     products: ["Knowledge Hub"],
-    icon: "assets/icon-knowledgehub.png",
+    icon: "assets/icon-knowledgehub.svg",
     keywords: "knowledge rag retrieval unstructured documents agents ai-ready data management",
     assets: []
   },
