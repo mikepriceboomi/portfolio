@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Launch Calendar — Sales Plays</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/sphere-single.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFFFF;
+  --wash:#F6F8FA;
+  --navy:#02283B;
+  --body:#4E626D;
+  --mute:#8496A0;
+  --faint:#AFBCC3;
+  --hair:#E5EAED;
+  --coral:#FF7C66;
+  --coral-ink:#E0573F;
+  --violet:#6B3FA0;
+  --violet-ink:#5A338C;
+  --violet-wash:#F4EFFA;
+  --ice:#EAF1F6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--paper);color:var(--body);
+  font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-weight:300;-webkit-font-smoothing:antialiased;line-height:1.5;
+}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 44px}
+
+/* ═══════════ CHROME ═══════════ */
+header.top{position:relative;z-index:5}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:78px}
+/* official 2-color logo; the file carries its own clear space, so it is sized up and pulled left to align */
+header.top .home{display:block;margin-left:-9px;border-radius:6px}
+header.top .home img{height:40px;width:auto;display:block}
+header.top .home:focus-visible{outline:2px solid var(--coral);outline-offset:2px}
+.tag{display:flex;align-items:center;gap:9px;font-size:10.5px;font-weight:500;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--faint)}
+.tag i{width:5px;height:5px;border-radius:50%;background:var(--coral);display:block}
+
+/* ═══════════ HERO ═══════════ */
+.hero{position:relative;overflow:hidden;padding:46px 0 40px}
+.hero .orbs{position:absolute;right:-120px;top:-150px;width:520px;pointer-events:none;z-index:0}
+.hero .orbs img{width:100%;display:block;animation:fl 30s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(-18px,13px) rotate(2.5deg)}}
+.hero .wrap{position:relative;z-index:1}
+.kicker{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--coral);display:flex;align-items:center;gap:11px;margin-bottom:16px}
+.kicker:after{content:"";width:34px;height:1px;background:var(--coral);opacity:.45}
+h1{font-size:54px;font-weight:600;letter-spacing:-.042em;line-height:1.02;color:var(--navy)}
+.lede{margin-top:16px;font-size:16px;line-height:1.6;max-width:56ch}
+.lede em{font-style:normal;font-weight:500;color:var(--navy)}
+
+/* ═══════════ TOOLBAR ═══════════ */
+.toolbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+.toolbar .row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;padding-top:14px;padding-bottom:14px}
+.search{position:relative;flex:1 1 300px;max-width:440px}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--mute)}
+.search input{width:100%;font:inherit;font-size:14px;font-weight:400;color:var(--navy);
+  padding:11px 44px 11px 40px;border:1px solid var(--hair);border-radius:10px;background:var(--paper);outline:none;
+  transition:border-color .15s, box-shadow .15s}
+.search input::placeholder{color:var(--faint)}
+.search input:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(2,40,59,.08)}
+.search kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font:inherit;font-size:11px;
+  font-weight:500;color:var(--faint);border:1px solid var(--hair);border-radius:5px;padding:1px 7px}
+/* domain tabs — the main filter */
+.domains{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--hair)}
+.domains::-webkit-scrollbar{display:none}
+.dom{all:unset;cursor:pointer;flex:none;padding:14px 16px 12px;border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:border-color .15s}
+.dom .dn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:var(--body);letter-spacing:-.005em}
+.dom .dn b{font-size:10.5px;font-weight:600;color:var(--faint);background:var(--wash);border-radius:999px;padding:1px 7px}
+.dom .dx{display:block;margin-top:2px;font-size:10.5px;font-weight:400;color:var(--faint);min-height:15px}
+.dom:hover .dn{color:var(--navy)}
+.dom[aria-selected="true"]{border-bottom-color:var(--coral)}
+.dom[aria-selected="true"] .dn{color:var(--navy);font-weight:600}
+.dom[aria-selected="true"] .dn b{background:var(--navy);color:#fff}
+.dom:focus-visible{outline:2px solid var(--coral);outline-offset:-2px;border-radius:6px}
+.chips-label{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-right:2px}
+.chips{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+.chip{font:inherit;font-size:12px;font-weight:500;color:var(--body);background:var(--paper);
+  border:1px solid var(--hair);border-radius:999px;padding:6px 13px;cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--faint);color:var(--navy)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip{font-size:11.5px;padding:5px 11px}
+.count{margin-left:auto;font-size:11px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+
+/* ═══════════ CALENDAR RAIL ═══════════ */
+.rail{margin:34px 0 8px}
+.rail h2,.section-h{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--mute);margin-bottom:16px}
+.rail ol{list-style:none;display:grid;grid-template-columns:repeat(var(--n),1fr);position:relative}
+.rail ol:before{content:"";position:absolute;left:0;right:0;top:9px;height:2px;background:var(--hair)}
+.rail li{position:relative;padding-right:10px}
+.rail button{all:unset;cursor:pointer;display:block;width:100%}
+.rail .dot{display:block;position:relative;width:18px;height:18px;border-radius:50%;background:var(--paper);
+  border:2px solid var(--coral);transition:all .15s}
+.rail li.h2 .dot{border-color:var(--navy)}
+.rail li.ongoing .dot{border-color:var(--violet)}
+.rail .m{display:block;margin-top:9px;font-size:13px;font-weight:600;color:var(--coral-ink)}
+.rail li.h2 .m{color:var(--navy)}
+.rail li.ongoing .m{color:var(--violet-ink)}
+.rail .t{display:block;margin-top:3px;font-size:11.5px;line-height:1.4;color:var(--body);transition:opacity .15s}
+.rail .t.off{opacity:.3}
+.rail button:hover .dot,.rail button[aria-pressed="true"] .dot{background:var(--coral)}
+.rail li.h2 button:hover .dot,.rail li.h2 button[aria-pressed="true"] .dot{background:var(--navy)}
+.rail li.ongoing button:hover .dot,.rail li.ongoing button[aria-pressed="true"] .dot{background:var(--violet)}
+.rail button[aria-pressed="true"] .m{text-decoration:underline;text-underline-offset:4px}
+
+/* ═══════════ CARDS ═══════════ */
+main{padding:26px 0 70px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:22px}
+.card{position:relative;display:flex;flex-direction:column;background:var(--paper);
+  border:1px solid var(--hair);border-top:3px solid var(--coral);border-radius:4px 4px 10px 10px;
+  padding:22px 22px 18px;transition:box-shadow .2s, transform .2s;scroll-margin-top:190px}
+.card.h2{border-top-color:var(--navy)}
+.card:hover{box-shadow:0 10px 30px rgba(2,40,59,.08);transform:translateY(-2px)}
+.card.target{box-shadow:0 0 0 3px rgba(255,124,102,.35)}
+.card .head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.dlabel{font-size:10.5px;font-weight:500;color:var(--mute);letter-spacing:.02em}
+.dlabel:before{content:"·";margin:0 7px;color:var(--faint)}
+.when{display:inline;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--coral-ink)}
+.card.h2 .when{color:var(--navy)}
+.card h3{margin-top:6px;font-size:19px;font-weight:600;letter-spacing:-.02em;line-height:1.25;color:var(--navy)}
+.ico{flex:none;width:42px;height:42px;border-radius:10px;display:grid;place-items:center;background:var(--wash)}
+.ico img{width:30px;height:30px;object-fit:contain}
+.ico.glyph svg{width:22px;height:22px;stroke:var(--navy)}
+.ico.glyph{font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--navy);background:var(--ice)}
+.card p.sum{margin-top:10px;font-size:14px;line-height:1.55}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tags span{font-size:11px;font-weight:500;color:var(--body);background:var(--wash);border-radius:5px;padding:2px 8px}
+.assets{margin-top:18px;padding-top:14px;border-top:1px solid var(--hair);flex:1}
+.assets h4{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.assets ul{list-style:none}
+.assets li a{display:flex;align-items:center;gap:10px;padding:7px 8px;margin:0 -8px;border-radius:7px;
+  text-decoration:none;font-size:13.5px;font-weight:400;color:var(--navy);transition:background .15s}
+.assets li a:hover{background:var(--wash)}
+.assets li a:after{content:"→";margin-left:auto;color:var(--faint);transition:transform .15s,color .15s}
+.assets li a:hover:after{transform:translateX(3px);color:var(--coral)}
+.type{flex:none;min-width:74px;text-align:center;font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  border-radius:4px;padding:3px 6px;background:var(--ice);color:var(--navy)}
+.type.video,.type.mq{background:#FFEDE9;color:var(--coral-ink)}
+.type.clickable{background:var(--violet-wash);color:var(--violet-ink)}
+.empty{font-size:13px;color:var(--faint);font-style:italic}
+.foot-row{display:flex;justify-content:flex-end;margin-top:12px}
+.link{font:inherit;font-size:11px;font-weight:500;color:var(--mute);background:none;border:0;cursor:pointer;
+  display:flex;align-items:center;gap:6px;padding:4px 0}
+.link:hover{color:var(--navy)}
+.link svg{width:13px;height:13px;stroke:currentColor}
+
+/* ongoing play: the full-width band, as on the calendar */
+.card.ongoing{grid-column:1 / -1;border-top-color:var(--violet);background:linear-gradient(90deg,var(--violet-wash),#fff 70%)}
+.card.ongoing .when{color:var(--violet-ink)}
+.card.ongoing .assets{flex:none}
+@media(min-width:900px){
+  .card.ongoing{display:grid;grid-template-columns:1.25fr 1fr;column-gap:40px}
+  .card.ongoing .assets{margin-top:0;padding-top:0;border-top:0;border-left:1px solid var(--hair);padding-left:32px;grid-row:1 / span 4;grid-column:2}
+  .card.ongoing .foot-row{grid-column:1}
+}
+
+.none{display:none;text-align:center;padding:70px 0;color:var(--mute)}
+.none span{display:inline-block;max-width:52ch}
+.none b{display:block;font-size:18px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.none button{margin-top:14px}
+
+/* ═══════════ FOOTER ═══════════ */
+footer{border-top:1px solid var(--hair);padding:26px 0 40px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between;
+  font-size:11px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+footer b{font-weight:500;color:var(--mute)}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  background:var(--navy);color:#fff;font-size:13px;font-weight:400;padding:9px 16px;border-radius:8px;transition:all .25s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* reveal */
+.a{opacity:0;transform:translateY(14px);animation:rise .6s cubic-bezier(.2,.85,.25,1) forwards;animation-delay:calc(var(--i,0) * 60ms + 80ms)}
+@keyframes rise{to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.a{animation:none;opacity:1;transform:none}.hero .orbs img{animation:none}}
+
+@media(max-width:760px){
+  .wrap{padding:0 22px}
+  h1{font-size:40px}
+  .rail{overflow-x:auto}
+  .rail ol{min-width:760px}
+  .count{margin-left:0}
+}
+
+/* ═══════════ CALENDAR PAGE ═══════════ */
+.year{padding:38px 0 10px}
+.year + .year{border-top:1px solid var(--hair)}
+.year h2{font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--navy);margin-bottom:22px}
+.year h2 small{margin-left:12px;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.rail{margin:0}
+.rail .t a{text-decoration:none}
+.rail .t a:hover{color:var(--navy);text-decoration:underline;text-underline-offset:3px}
+.rail .t .d{display:block;font-size:10px;color:var(--faint)}
+.rail li{padding-bottom:6px}
+.tbd{border:1px dashed var(--faint);border-radius:10px;padding:26px 28px;color:var(--mute);font-size:14px;max-width:640px}
+.tbd b{display:block;color:var(--navy);font-weight:600;margin-bottom:4px}
+.back{font-size:12px;font-weight:500;color:var(--mute);text-decoration:none}
+.back:hover{color:var(--navy)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="home" href="index.html" aria-label="Sales Plays home"><img src="assets/SVG_Boomi_Logo_2-Color_Positive.svg" alt="Boomi"></a>
+    <div class="tag"><i></i>Solution Domain Experts</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="orbs"><img src="assets/sphere-group.png" alt=""></div>
+  <div class="wrap">
+    <div class="kicker a" style="--i:0">Sales plays</div>
+    <h1 class="a" style="--i:1">Launch Calendar</h1>
+    <p class="lede a" style="--i:2">When each play launches. Select a play to open its card on the <a href="index.html" style="color:var(--navy);font-weight:500">sales plays page</a>.</p>
+  </div>
+</section>
+
+<main style="padding-top:0">
+  <div class="wrap" id="years"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Field Engineering &nbsp;·&nbsp; <b>Domain Experts</b></span>
+    <a class="back" href="index.html">← All sales plays</a>
+  </div>
+</footer>
+
+<script src="plays.js"></script>
+<script>
+(function(){
+  var PLAYS = window.PLAYS || [], DOMAINS = window.DOMAINS || [];
+  PLAYS = PLAYS.filter(function(p){ return !p.hidden; });
+  var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var H2_FROM = 8;                    // Sep onward reads navy, as on the 2026 calendar slide
+  /* Years to show. A year with no plays yet shows a placeholder until its schedule is set. */
+  var YEARS = [2026, 2027];
+  var domName = {}; DOMAINS.forEach(function(d){ domName[d.id] = d.name; });
+  var esc = function(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+  var idx = function(p){ return p.ongoing ? 99 : MONTHS.indexOf(p.month); };
+  var phase = function(p){ return p.ongoing ? "ongoing" : (idx(p) >= H2_FROM ? "h2" : ""); };
+
+  document.getElementById("years").innerHTML = YEARS.map(function(y, n){
+    var ps = PLAYS.filter(function(p){ return p.year === y; }).sort(function(a,b){ return idx(a) - idx(b); });
+    if(!ps.length){
+      return '<section class="year a" style="--i:'+(n+3)+'"><h2>'+y+'<small>In planning</small></h2>' +
+        '<div class="tbd"><b>The '+y+' schedule is coming into focus</b>Plays will appear here as their launch months are set.</div></section>';
+    }
+    var stops = [];
+    ps.forEach(function(p){ if(stops.indexOf(p.month) < 0) stops.push(p.month); });
+    return '<section class="year a" style="--i:'+(n+3)+'"><h2>'+y+'<small>'+ps.length+' plays</small></h2>' +
+      '<nav class="rail"><ol style="--n:'+stops.length+'">' + stops.map(function(m){
+        var here = ps.filter(function(p){ return p.month === m; });
+        return '<li class="'+phase(here[0])+'"><span class="dot"></span><span class="m">'+esc(m)+'</span>' +
+          here.map(function(p){
+            return '<span class="t"><a href="index.html#'+esc(p.id)+'">'+esc(p.title)+'</a>' +
+              (domName[p.domain] ? '<span class="d">'+esc(domName[p.domain])+'</span>' : '')+'</span>';
+          }).join("") + '</li>';
+      }).join("") + '</ol></nav></section>';
+  }).join("");
+})();
+</script>
+</body>
+</html>
