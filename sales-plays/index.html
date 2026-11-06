@@ -76,6 +76,7 @@ h1{font-size:54px;font-weight:600;letter-spacing:-.042em;line-height:1.02;color:
 .dom{all:unset;cursor:pointer;flex:none;padding:14px 12px 12px;border-bottom:2px solid transparent;margin-bottom:-1px;
   transition:border-color .15s}
 .dom .dn{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:500;color:var(--body);letter-spacing:-.005em}
+.dom .dn i{width:7px;height:7px;border-radius:50%;background:var(--dc);flex:none}
 .dom .dn b{font-size:10.5px;font-weight:600;color:var(--faint);background:var(--wash);border-radius:999px;padding:1px 7px}
 .dom .dx{display:block;margin-top:2px;font-size:10.5px;font-weight:400;color:var(--faint);min-height:15px}
 .dom:hover .dn{color:var(--navy)}
@@ -123,14 +124,15 @@ main{padding:34px 0 70px}
 .card{position:relative;display:flex;flex-direction:column;background:var(--paper);
   border:1px solid var(--hair);border-top:3px solid var(--coral);border-radius:4px 4px 10px 10px;
   padding:22px 22px 18px;transition:box-shadow .2s, transform .2s;scroll-margin-top:190px}
-.card.h2{border-top-color:var(--navy)}
+.card{border-top-color:var(--dc,var(--navy))}
 .card:hover{box-shadow:0 10px 30px rgba(2,40,59,.08);transform:translateY(-2px)}
 .card.target{box-shadow:0 0 0 3px rgba(255,124,102,.35)}
 .card .head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
 .dlabel{font-size:10.5px;font-weight:500;color:var(--mute);letter-spacing:.02em}
 .dlabel:before{content:"·";margin:0 7px;color:var(--faint)}
 .when{display:inline;font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--navy)}
-.card.h2 .when{color:var(--navy)}
+.soon{display:inline-block;margin:0 0 8px;padding:2px 8px;border-radius:999px;font-size:9.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--coral-ink);background:#FFF1EE}
 .card h3{margin-top:6px;font-size:19px;font-weight:600;letter-spacing:-.02em;line-height:1.25;color:var(--navy)}
 .ico{flex:none;width:42px;height:42px;border-radius:10px;display:grid;place-items:center;background:var(--wash)}
 .ico img{width:30px;height:30px;object-fit:contain}
@@ -261,11 +263,11 @@ footer b{font-weight:500;color:var(--mute)}
   var PLAYS = window.PLAYS || [];
   PLAYS = PLAYS.filter(function(p){ return !p.hidden; });
   var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  var H2_FROM = 8;                    // Sep onward reads navy, as on the calendar slide
+  var NOW = new Date(), NOW_M = NOW.getFullYear() * 12 + NOW.getMonth();
   var TYPES = {"demo-portal":"Demo portal", process:"Processes", clickable:"Clickable", video:"Video", mq:"MQ demo", deck:"Deck", "talk-track":"Talk track",
                whiteboard:"Whiteboard", highspot:"Page", doc:"Doc", other:"Link"};
   var DOMAINS = window.DOMAINS || [];
-  var domName = {}; DOMAINS.forEach(function(d){ domName[d.id] = d.name; });
+  var domName = {}, domColor = {}; DOMAINS.forEach(function(d){ domName[d.id] = d.name; domColor[d.id] = d.color; });
   var state = {q:"", product:null, domain:null};
   /* asset row icons: simple navy line glyphs, one per type */
   var I = function(d){ return '<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>'; };
@@ -299,7 +301,9 @@ footer b{font-weight:500;color:var(--mute)}
   var esc = function(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
     return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
   var monthIdx = function(p){ return p.ongoing ? 99 : MONTHS.indexOf(p.month); };
-  var phase = function(p){ return p.ongoing ? "ongoing" : (monthIdx(p) >= H2_FROM ? "h2" : ""); };
+  var phase = function(p){ return p.ongoing ? "ongoing" : ""; };
+  /* launches after the current month: flagged "Coming soon", worked out from today's date */
+  var upcoming = function(p){ return !p.ongoing && (p.year || 0) * 12 + MONTHS.indexOf(p.month) > NOW_M; };
   /* generic, unbranded glyphs for plays with no official Boomi icon yet */
   var GLYPHS = {
     plug:'<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7V3M15 7V3M6 7h12v4a6 6 0 0 1-12 0V7zM12 17v4"/></svg>',
@@ -322,7 +326,7 @@ footer b{font-weight:500;color:var(--mute)}
   $("domains").innerHTML = [{id:"", name:"All", experts:""}].concat(DOMAINS).map(function(d){
     var n = PLAYS.filter(function(p){ return !d.id || p.domain === d.id; }).length;
     return '<button class="dom" role="tab" data-d="'+esc(d.id)+'" aria-selected="'+(!d.id)+'">' +
-      '<span class="dn">'+esc(d.name)+'<b>'+n+'</b></span><span class="dx">'+esc(d.experts)+'</span></button>';
+      '<span class="dn">'+(d.color ? '<i style="--dc:'+esc(d.color)+'"></i>' : '')+esc(d.name)+'<b>'+n+'</b></span><span class="dx">'+esc(d.experts)+'</span></button>';
   }).join("");
 
   /* product chips: secondary, and only the products present in the current domain */
@@ -355,8 +359,8 @@ footer b{font-weight:500;color:var(--mute)}
             '<svg class="at-go" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>';
         }).join("") + '</ul>'
       : '<div class="empty">No assets linked yet</div>';
-    return '<article class="card a '+phase(p)+'" id="'+esc(p.id)+'" style="--i:'+(i+4)+'">' +
-      '<div><div class="head"><div><div><span class="when">'+esc(p.ongoing ? "Ongoing" : p.month+" "+p.year)+'</span>' +
+    return '<article class="card a '+phase(p)+'" id="'+esc(p.id)+'" style="--i:'+(i+4)+(domColor[p.domain] ? ';--dc:'+esc(domColor[p.domain]) : '')+'">' +
+      '<div><div class="head"><div>'+(upcoming(p) ? '<span class="soon">Coming soon</span>' : '')+'<div><span class="when">'+esc(p.ongoing ? "Ongoing" : p.month+" "+p.year)+'</span>' +
       (domName[p.domain] ? '<span class="dlabel">'+esc(domName[p.domain])+'</span>' : '')+'</div>' +
       '<h3>'+esc(p.title)+'</h3></div>'+ico+'</div>' +
       '<p class="sum">'+esc(p.summary)+'</p>' +

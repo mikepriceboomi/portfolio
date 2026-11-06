@@ -13,14 +13,15 @@
  * `glyph` to a short label ("SAP") or a generic glyph ("plug", "signal") — never an invented logo.
  */
 /* The team's domains — the main filter. Order here is the order of the tabs.
+ * `color` marks the domain's cards and tab dot: Boomi palette only (navy, slate, coral, violet, lilac).
  * `empty` is the message a tab shows while it has no plays. */
 window.DOMAINS = [
-  { id: "data-management",         name: "Data Management",          experts: "Scott · Salomé · Ale" },
-  { id: "ipaas-b2b",               name: "iPaaS & B2B/EDI",          experts: "Ian" },
-  { id: "api-management",          name: "API Management",           experts: "Kevin" },
-  { id: "connectivity-governance", name: "AI Connectivity & Governance", experts: "Or",
+  { id: "data-management",         color: "#033D58", name: "Data Management",          experts: "Scott · Salomé · Ale" },
+  { id: "ipaas-b2b",               color: "#FF7C66", name: "iPaaS & B2B/EDI",          experts: "Ian" },
+  { id: "api-management",          color: "#3D7391", name: "API Management",           experts: "Kevin" },
+  { id: "connectivity-governance", color: "#6B3FA0", name: "AI Connectivity & Governance", experts: "Or",
     empty: "Plays for Boomi Connect and the gateways (MCP, AI and API) belong here." },
-  { id: "platform-solutions",      name: "Platform Solutions",       experts: "Michael",
+  { id: "platform-solutions",      color: "#B79BE0", name: "Platform Solutions",       experts: "Michael",
     empty: "Platform solution plays are built around a customer outcome rather than a single product. None are listed yet." }
 ];
 
@@ -108,35 +109,25 @@ window.PLAYS = [
     ]
   },
   {
-    id: "meta-hub", domain: "data-management",
-    month: "Sep", year: 2026,
-    title: "Meta Hub",
-    summary: "Unify and govern metadata to create trusted, connected data for analytics and AI.",
-    products: ["Meta Hub"],
-    icon: "assets/icon-metahub.svg",
-    keywords: "metadata catalog governance lineage analytics ai data management",
-    assets: []
-  },
-  {
     id: "bdi-competitors-takeout", domain: "data-management",
-    month: "Oct", year: 2026,
-    title: "BDI Competitors Takeout + Elementary",
+    month: "Dec", year: 2026,
+    title: "BDI Competitors Takeout",
     summary: "Takeout campaign.",
     products: ["BDI"],
     icon: "assets/icon-bdi.png",
-    keywords: "data integration rivery takeout competitive displacement elementary fivetran matillion",
+    keywords: "data integration rivery takeout competitive displacement fivetran matillion",
     assets: [
       { type: "deck", title: "BDI GTM enablement deck", url: "https://docs.google.com/presentation/d/1iPW6Ihv38ToAPz4Y2sZJbqFyT5jw5NVVsC9BS5ruwR8/edit?usp=sharing" }
     ]
   },
   {
-    id: "knowledge-hub", domain: "data-management",
-    month: "Oct", year: 2026,
-    title: "Knowledge Hub",
-    summary: "Unify enterprise knowledge to deliver trusted, AI-ready information that powers agents.",
-    products: ["Knowledge Hub"],
-    icon: "assets/icon-knowledgehub.svg",
-    keywords: "knowledge rag retrieval unstructured documents agents ai-ready data management",
+    id: "meta-hub", domain: "data-management",
+    month: "Dec", year: 2026,
+    title: "Context Layer: Meta Hub & Knowledge Hub",
+    summary: "Unify and govern metadata and enterprise knowledge to deliver trusted, AI-ready context for analytics and agents.",
+    products: ["Meta Hub", "Knowledge Hub"],
+    icon: "assets/icon-metahub.svg",
+    keywords: "context layer metadata catalog governance lineage knowledge rag retrieval unstructured documents agents ai-ready analytics data management",
     assets: []
   },
   {
