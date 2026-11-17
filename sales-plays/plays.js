@@ -109,6 +109,21 @@ window.PLAYS = [
     ]
   },
   {
+    id: "elementary-data", domain: "data-management",
+    month: "Nov", year: 2026,
+    title: "Elementary Data",
+    summary: "Q4 cross-sell of Elementary data quality and observability to BDI and cloud-warehouse customers. Blitz days in Barcelona and Vancouver; 50% off for existing customers through Dec 31.",
+    products: ["Elementary", "BDI"],
+    icon: "", glyph: "signal",
+    keywords: "elementary data observability data quality dbt snowflake bigquery redshift databricks blitz barcelona vancouver monte carlo anomalo metaplane acquisition data health assessment",
+    assets: [
+      { type: "highspot", title: "Elementary sales play page", url: "https://boomi.highspot.com/items/6aee4b7773cae88908e41bfd" },
+      { type: "deck", title: "Elementary presentation", url: "https://boomi.highspot.com/items/6ad0fa29723fc8ec39e4ea95" },
+      { type: "video", title: "Elementary crash course for SEs", url: "https://boomi.highspot.com/items/6af5ccdc51e183f8d7f21c36" },
+      { type: "video", title: "Elementary demo (7 min)", url: "https://boomi.highspot.com/items/6af5f00707409e8291cd25a6" }
+    ]
+  },
+  {
     id: "bdi-competitors-takeout", domain: "data-management",
     month: "Dec", year: 2026,
     title: "BDI Competitors Takeout",
