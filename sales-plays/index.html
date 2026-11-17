@@ -35,7 +35,12 @@ a{color:inherit}
 
 /* ═══════════ CHROME ═══════════ */
 header.top{position:relative;z-index:5}
-header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:78px}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:78px;gap:24px}
+.sitenav{display:flex;gap:6px;margin-left:auto}
+.sitenav a{font-size:13px;font-weight:500;text-decoration:none;color:var(--body);padding:7px 14px;border-radius:999px;transition:background .15s,color .15s}
+.sitenav a:hover{background:var(--wash);color:var(--navy)}
+.sitenav a[aria-current=page]{background:var(--navy);color:#fff}
+@media (max-width:640px){.sitenav a{padding:6px 10px;font-size:12px}}
 /* official 2-color logo; the file carries its own clear space, so it is sized up and pulled left to align */
 header.top .home{display:block;margin-left:-9px;border-radius:6px}
 header.top .home img{height:40px;width:auto;display:block}
@@ -205,6 +210,7 @@ footer b{font-weight:500;color:var(--mute)}
 <header class="top">
   <div class="wrap">
     <a class="home" href="index.html" aria-label="Sales Plays home"><img src="assets/SVG_Boomi_Logo_2-Color_Positive.svg" alt="Boomi"></a>
+    <nav class="sitenav" aria-label="Site"><a href="index.html" aria-current="page">Sales Plays</a><a href="workflow.html">Opportunity Workflow</a></nav>
     <div class="tag"><i></i>Solution Domain Experts</div>
   </div>
 </header>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opportunity Workflow — Solution Domain Experts</title>
+<link rel="icon" href="assets/sphere-single.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FFFFFF;--wash:#F6F8FA;--navy:#02283B;--body:#2E4250;--mute:#5E7280;--faint:#93A3AE;--hair:#D7DFE5;
+  --coral:#FF7C66;--coral-ink:#E0573F;--coral-wash:#FFF1EE;--violet:#6B3FA0;--violet-wash:#F4EFFA;
+  --ice:#EAF1F6;--slate:#3D7391;
+  --s1:#02283B;--s2:#3D7391;--s3:#6B3FA0;--s4:#E0573F;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--body);font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;line-height:1.5}
+a{color:inherit}
+b,strong{font-weight:600;color:var(--navy)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 44px}
+@media (max-width:640px){.wrap{padding:0 20px}}
+
+/* chrome: same as the Sales Plays pages */
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:78px;gap:24px}
+header.top .home{display:block;margin-left:-9px;border-radius:6px}
+header.top .home img{height:40px;width:auto;display:block}
+.tag{display:flex;align-items:center;gap:9px;font-size:10.5px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--mute)}
+.tag i{width:5px;height:5px;border-radius:50%;background:var(--coral);display:block}
+.sitenav{display:flex;gap:6px;margin-left:auto}
+.sitenav a{font-size:13px;font-weight:500;text-decoration:none;color:var(--body);padding:7px 14px;border-radius:999px}
+.sitenav a:hover{background:var(--wash);color:var(--navy)}
+.sitenav a[aria-current=page]{background:var(--navy);color:#fff}
+@media (max-width:760px){.tag{display:none}}
+
+.hero{position:relative;overflow:hidden;padding:34px 0 26px}
+.hero .orbs{position:absolute;right:-130px;top:-180px;width:480px;pointer-events:none}
+.hero .orbs img{width:100%;display:block}
+.hero .wrap{position:relative;z-index:1}
+.kicker{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--coral-ink);display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.kicker:after{content:"";width:34px;height:1px;background:var(--coral);opacity:.5}
+h1{font-size:50px;font-weight:600;letter-spacing:-.042em;line-height:1.02;color:var(--navy)}
+.lede{margin-top:12px;font-size:17px;line-height:1.6;max-width:60ch}
+.goals{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.goal{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--hair);border-radius:999px;padding:7px 15px;font-size:13px;font-weight:600;color:var(--navy)}
+.goal svg{width:18px;height:18px;stroke:var(--coral-ink);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:640px){h1{font-size:38px}}
+
+/* ── the journey bar: stages, arrows, and the gate between each ── */
+.journey{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--hair);padding:14px 0}
+.jr{display:flex;align-items:center}
+.jstage{flex:1;min-width:0;display:flex;align-items:center;gap:10px;text-decoration:none;padding:10px 14px;border-radius:12px;background:var(--wash);border:1.5px solid transparent;transition:border-color .15s,background .15s}
+.jstage:hover{background:#fff;border-color:var(--c)}
+.jstage .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--c);color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center}
+.jstage .t{min-width:0}
+.jstage .t b{display:block;font-size:15px;line-height:1.2}
+.jstage .t span{display:block;font-size:11.5px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jgate{flex:none;display:flex;flex-direction:column;align-items:center;width:104px;position:relative}
+.jgate:before{content:"";position:absolute;left:0;right:6px;top:13px;height:2px;background:var(--faint)}
+.jgate:after{content:"";position:absolute;right:0;top:9px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:8px solid var(--faint)}
+.jgate .d{position:relative;z-index:1;width:20px;height:20px;transform:rotate(45deg);border:2px solid var(--coral);background:var(--coral-wash);border-radius:3px;margin-top:3px}
+.jgate em{margin-top:8px;font-style:normal;font-size:11px;font-weight:600;color:var(--navy);text-align:center;line-height:1.2}
+.jend{flex:none;background:var(--navy);color:#fff;border-radius:999px;padding:10px 16px;font-size:13px;font-weight:600;white-space:nowrap}
+.jgate.last{width:46px}.jgate.last .d,.jgate.last em{display:none}
+@media (max-width:1000px){.jr{flex-wrap:wrap;gap:10px}.jgate{display:none}.jstage{flex:1 1 40%}.jend{display:none}}
+
+.tools{display:flex;justify-content:flex-end;gap:10px;margin:22px 0 4px}
+.tbtn{font:inherit;font-size:12.5px;font-weight:600;color:var(--navy);background:#fff;border:1px solid var(--hair);border-radius:999px;padding:7px 14px;cursor:pointer}
+.tbtn:hover{border-color:var(--navy)}
+
+/* ── stages ── */
+main{padding:0 0 64px}
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:10px;align-items:start}
+@media (max-width:1100px){.stages{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.stages{grid-template-columns:1fr}}
+.stage{scroll-margin-top:110px;background:#fff;border:1px solid var(--hair);border-top:5px solid var(--c);border-radius:6px 6px 16px 16px;padding:18px 16px 16px;display:flex;flex-direction:column}
+.sh{display:flex;align-items:center;gap:10px}
+.sh .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff;font-size:12.5px;font-weight:700;display:grid;place-items:center}
+.sh h2{font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--navy)}
+.own{margin:6px 0 14px 38px;font-size:12.5px;color:var(--mute)}
+
+/* timeline of steps */
+.steps{list-style:none;position:relative}
+.steps:before{content:"";position:absolute;left:13px;top:10px;bottom:18px;width:2px;background:var(--hair)}
+.st{position:relative;padding:0 0 13px 38px}
+.st:before{content:"";position:absolute;left:8px;top:5px;width:12px;height:12px;border-radius:50%;background:#fff;border:2.5px solid var(--c)}
+.st.key:before{background:var(--c)}
+.st h3{font-size:15px;font-weight:600;color:var(--navy);line-height:1.3}
+.st h3 .tagx{vertical-align:2px;margin-left:4px}
+.st p.sum{margin-top:2px;font-size:13.5px;line-height:1.45;color:var(--body)}
+details{margin-top:5px}
+summary{list-style:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--slate);display:inline-flex;align-items:center;gap:6px;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary:before{content:"+";display:grid;place-items:center;width:15px;height:15px;border-radius:50%;border:1.5px solid currentColor;font-size:11px;line-height:1}
+details[open] > summary:before{content:"–"}
+summary:hover{color:var(--navy)}
+details ul,details ol{margin-top:7px;padding:10px 12px;background:var(--wash);border-radius:10px;list-style:none}
+details li{position:relative;padding-left:12px;font-size:13px;line-height:1.5;margin-bottom:3px}
+details ul li:before{content:"";position:absolute;left:0;top:9px;width:4px;height:4px;border-radius:50%;background:var(--slate)}
+details ol{counter-reset:c}
+details ol li{counter-increment:c;padding-left:22px}
+details ol li:before{content:counter(c);position:absolute;left:0;top:2px;width:16px;height:16px;border-radius:50%;background:var(--violet);color:#fff;font-size:9.5px;font-weight:700;display:grid;place-items:center}
+
+/* the gate at the end of each stage */
+.gate{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;background:var(--coral-wash);font-size:13.5px;font-weight:600;color:var(--navy)}
+.gate .d{flex:none;width:15px;height:15px;transform:rotate(45deg);border:2px solid var(--coral);background:#fff;border-radius:3px}
+.gate span{margin-left:auto;font-weight:500;font-size:12px;color:var(--coral-ink);white-space:nowrap}
+.gate.top{margin-bottom:12px}
+.end{margin-top:12px;text-align:center;background:var(--navy);color:#fff;border-radius:999px;padding:10px;font-size:14px;font-weight:600}
+
+/* bring in: violet chips that open */
+.bring{margin-top:14px;padding-top:12px;border-top:1px dashed #C9B4E6}
+.bring h4{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--violet);margin-bottom:8px}
+.chips{display:flex;flex-direction:column;gap:6px}
+.chip{margin:0;background:var(--violet-wash);border:1px solid #DCCCF0;border-radius:10px;padding:8px 11px}
+.chip summary{color:var(--violet);font-size:13px;width:100%}
+.chip p{margin-top:6px;font-size:13px;line-height:1.5;color:var(--body)}
+.chip[open]{background:#fff;border-color:#C9B4E6}
+
+/* links: coral, underlined, with an arrow; nothing else on the page looks like this */
+a.go{font-weight:600;color:#C8432C;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;text-decoration-color:rgba(224,87,63,.45);border-radius:3px;transition:background .15s,text-decoration-color .15s}
+a.go:hover{background:var(--coral-wash);text-decoration-color:#C8432C}
+a.go:after{content:"↗";display:inline-block;font-size:.85em;margin-left:3px;text-decoration:none}
+.tagx{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;padding:1px 7px;border-radius:999px}
+.tagx.ae{background:var(--coral-wash);color:var(--coral-ink)}.tagx.se{background:#DCE8F1;color:var(--navy)}
+
+.legend{margin-top:18px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;font-size:12.5px;color:var(--body)}
+.legend .lg{display:flex;align-items:center;gap:7px}
+.legend .dot{width:12px;height:12px;border-radius:50%;border:2.5px solid var(--slate);background:var(--slate)}
+.legend .dm{width:13px;height:13px;transform:rotate(45deg);border:2px solid var(--coral);background:var(--coral-wash);border-radius:2px}
+.legend .vc{width:20px;height:13px;border-radius:4px;background:var(--violet-wash);border:1px solid #C9B4E6}
+
+/* ── bottom: front door + team ── */
+.bottom{margin-top:34px;display:grid;grid-template-columns:5fr 7fr;gap:18px;align-items:start}
+@media (max-width:980px){.bottom{grid-template-columns:1fr}}
+.door{background:var(--navy);color:#fff;border-radius:16px;padding:20px 22px}
+.door .k{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#FFB4A6}
+.door h2{margin-top:6px;font-size:19px;font-weight:600;letter-spacing:-.015em}
+.door p{margin-top:6px;font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.88)}
+.door ul{margin-top:12px;list-style:none}
+.door li a{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:14px;font-weight:500;color:#fff;text-decoration:none;padding:7px 10px;border-radius:8px}
+.door li a:hover{background:rgba(255,255,255,.10)}
+.door li a:after{content:"↗";color:var(--coral)}
+.door .all{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.16);font-size:12.5px}
+.door .all a{color:rgba(255,255,255,.85)}
+.roster{border:1px solid var(--hair);border-radius:16px;padding:18px 20px}
+.roster h2{font-size:18px;font-weight:600;color:var(--navy);letter-spacing:-.015em}
+.roster h2 span{color:var(--violet)}
+.groups{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:700px){.groups{grid-template-columns:1fr}}
+.grp{border-radius:12px;padding:11px 13px 4px;border:1px solid var(--hair);border-left:5px solid var(--gc);background:var(--gw)}
+.grp h3{font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gc);margin-bottom:2px}
+.who{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid rgba(2,40,59,.08)}
+.who:last-child{border-bottom:0}
+.who .b{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:10.5px;font-weight:700;background:var(--gc);color:#fff}
+.who b{display:block;font-size:13.5px}
+.who span{display:block;font-size:12.5px;line-height:1.45;margin-top:1px}
+.g-deal{--gc:#02283B;--gw:#EEF3F7}.g-exp{--gc:#6B3FA0;--gw:#F4EFFA}.g-exec{--gc:#3D7391;--gw:#EAF1F6}.g-svc{--gc:#E0573F;--gw:#FFF3F0}
+
+footer{border-top:1px solid var(--hair);padding:22px 0 34px}
+footer .wrap{display:flex;justify-content:space-between;font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mute)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="home" href="https://boomi.highspot.com/items/6aecb8c121c6ee0a547f82e5" target="_top" aria-label="Sales Plays home"><img src="assets/SVG_Boomi_Logo_2-Color_Positive.svg" alt="Boomi"></a>
+    <nav class="sitenav" aria-label="Site"><a href="https://boomi.highspot.com/items/6aecb8c121c6ee0a547f82e5" target="_top">Sales Plays</a><a href="workflow.html" aria-current="page">Opportunity Workflow</a></nav>
+    <div class="tag"><i></i>Solution Domain Experts</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="orbs"><img src="assets/sphere-group.png" alt=""></div>
+  <div class="wrap">
+    <div class="kicker">Field playbook</div>
+    <h1>Opportunity Workflow</h1>
+    <p class="lede">Four stages from first contact to close. Each has an owner, a few steps, and a gate to clear before the next. Open any step for the detail, and bring in the right people as you go.</p>
+    <div class="goals">
+      <div class="goal"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg>Reduce time to close</div>
+      <div class="goal"><svg viewBox="0 0 24 24"><path d="M4 18l5-5 4 4 7-8"/><path d="M14 9h6v6"/></svg>Increase deal size</div>
+    </div>
+  </div>
+</section>
+
+<nav class="journey" aria-label="Stages">
+  <div class="wrap"><div class="jr">
+    <a class="jstage" href="#qualify" style="--c:var(--s1)"><span class="n">1</span><span class="t"><b>Qualify</b><span>Owner: AE</span></span></a>
+    <div class="jgate"><i class="d"></i><em>Qualified?</em></div>
+    <a class="jstage" href="#discover" style="--c:var(--s2)"><span class="n">2</span><span class="t"><b>Discover</b><span>Owners: SE + AE</span></span></a>
+    <div class="jgate"><i class="d"></i><em>Still qualified?</em></div>
+    <a class="jstage" href="#prove" style="--c:var(--s3)"><span class="n">3</span><span class="t"><b>Prove</b><span>Owner: SE</span></span></a>
+    <div class="jgate"><i class="d"></i><em>Technical win?</em></div>
+    <a class="jstage" href="#close" style="--c:var(--s4)"><span class="n">4</span><span class="t"><b>Value &amp; close</b><span>Owner: AE</span></span></a>
+    <div class="jgate last"></div>
+    <div class="jend">Deal close</div>
+  </div></div>
+</nav>
+
+<main><div class="wrap">
+<div class="tools"><button class="tbtn" id="toggle" type="button">Expand all details</button></div>
+
+<div class="stages">
+  <!-- 1 -->
+  <section class="stage" id="qualify" style="--c:var(--s1)">
+    <div class="sh"><span class="n">1</span><h2>Qualify</h2></div>
+    <div class="own">Owner <span class="tagx ae">AE</span> · with the BDR</div>
+    <ol class="steps">
+      <li class="st"><h3>Make contact with the lead</h3><p class="sum">The BDR creates and qualifies the lead.</p></li>
+      <li class="st key"><h3>Intro call: business discovery <span class="tagx ae">AE</span></h3><p class="sum">Why, why now, budget, and who decides.</p>
+        <details><summary>What to cover</summary><ul>
+          <li>Why? Why now? Is there budget?</li><li>Understand the decision process</li><li>Identify everyone involved, from IT and the business</li><li>Use the first-call deck to find where we fit</li></ul></details></li>
+    </ol>
+    <div class="gate"><i class="d"></i>Qualified?<span>No → end</span></div>
+    <div class="bring"><h4>Bring in if…</h4><div class="chips">
+      <details class="chip"><summary>It's a strategic initiative</summary><p>Bring in <b>APEX</b> (CTO office, formerly BIG) and a <b>Field CTO</b> for C-suite alignment and product vision. Bigger deals start here. <a class="go" href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/6259" target="_blank" rel="noopener">Request an Expert</a></p></details>
+      <details class="chip"><summary>A partner is in the account</summary><p>Engage the <b>partner</b> early; implementation partners already work closely with the customer. Start with your <b>Partner Sales Manager (PSM)</b>, who aligns the partner and co-sell. Requests for a specific partner go through its Slack workflow: <a class="go" href="https://boomilp.enterprise.slack.com/archives/C0AMNK0BPLN" target="_blank" rel="noopener">#accenture-requests</a>, <a class="go" href="https://boomilp.enterprise.slack.com/archives/C0B9R601HK5" target="_blank" rel="noopener">#snowflake-requests</a>, <a class="go" href="https://boomilp.enterprise.slack.com/archives/C0ALK3X3DFS" target="_blank" rel="noopener">#rsm-requests</a>, <a class="go" href="https://boomilp.enterprise.slack.com/archives/C0ARJR1E86M" target="_blank" rel="noopener">#connorgroup-requests</a>. AWS Marketplace private offers: <a class="go" href="https://boomilp.enterprise.slack.com/archives/C0AQ6SX3TM3" target="_blank" rel="noopener">#aws-mpopp-requests</a>.</p></details>
+    </div></div>
+  </section>
+
+  <!-- 2 -->
+  <section class="stage" id="discover" style="--c:var(--s2)">
+    <div class="sh"><span class="n">2</span><h2>Discover</h2></div>
+    <div class="own">Owners <span class="tagx se">SE</span> + <span class="tagx ae">AE</span></div>
+    <ol class="steps">
+      <li class="st key"><h3>Technical discovery <span class="tagx se">SE</span></h3><p class="sum">Turn use cases into business value, and agree the next step.</p>
+        <details><summary>What to cover</summary><ul>
+          <li>Validate why and why now</li><li>Uncover the technical use cases</li><li>Map each use case to business value</li><li>Agree the next step: demo, workshop or POC</li></ul></details></li>
+      <li class="st"><h3>Match it to a sales play</h3><p class="sum">Find an active play, with its decks and demos, in the <a class="go" href="https://boomi.highspot.com/items/6aecb8c121c6ee0a547f82e5" target="_blank" rel="noopener">Sales Play Library</a>.</p></li>
+      <li class="st"><h3>Technical validation document</h3><p class="sum">Write down the use cases and their value; confirm with the customer.</p>
+        <details><summary>How</summary><ul>
+          <li>Start from the template</li><li>Outline the use cases for the demo, workshop or POC, mapped to business value</li><li>Fill it in, then confirm it with the customer</li></ul></details></li>
+    </ol>
+    <div class="gate"><i class="d"></i>Still qualified?<span>No → end</span></div>
+    <div class="bring"><h4>Bring in if…</h4><div class="chips">
+      <details class="chip"><summary>You need domain expertise</summary><p><a class="go" href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/6259" target="_blank" rel="noopener">Request an Expert</a>: <b>Domain Experts</b> by domain (Data Management incl. BDI and Elementary · iPaaS &amp; B2B/EDI · APIM · AI Connectivity &amp; Governance · Platform Solutions), <b>Field Engineers</b> (SE use) or the <b>AI CoE / AI Solution Architects</b>.</p></details>
+      <details class="chip"><summary>Security or architecture comes up</summary><p>Security questions: <a class="go" href="https://boomilp.enterprise.slack.com/archives/C0319JKU1M2" target="_blank" rel="noopener">#boomi-security</a>. Architecture boards and roadmap: a <b>Field CTO</b> or Field Engineer via <a class="go" href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/6259" target="_blank" rel="noopener">Request an Expert</a>.</p></details>
+    </div></div>
+  </section>
+
+  <!-- 3 -->
+  <section class="stage" id="prove" style="--c:var(--s3)">
+    <div class="sh"><span class="n">3</span><h2>Prove</h2></div>
+    <div class="own">Owner <span class="tagx se">SE</span> · AE aligned</div>
+    <ol class="steps">
+      <li class="st key"><h3>Demo <span class="tagx se">SE</span></h3><p class="sum">Start with <a class="go" href="https://boomi.to/demohub" target="_blank" rel="noopener">DemoHub</a>; request a custom build only if needed.</p>
+        <details><summary>Options</summary><ul>
+          <li><b>DemoHub:</b> short videos and clickables you can send ahead</li>
+          <li><b>Tailored demo or asset:</b> <a class="go" href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/6259" target="_blank" rel="noopener">Request an Expert</a> → New Demo Assets, or Custom Demo/PoC</li>
+          <li><b>Environment access:</b> <a class="go" href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/3841" target="_blank" rel="noopener">Demo Environment Access</a></li></ul></details></li>
+      <li class="st"><h3>AI lab or workshop</h3><p class="sum"><a class="go" href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/6259" target="_blank" rel="noopener">Request an Expert</a> → Workshop/Lab, with the AI CoE for in-depth AI.</p></li>
+      <li class="st"><h3>POC</h3><p class="sum">Submit a <a class="go" href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/2447" target="_blank" rel="noopener">POC Request</a> once five entry criteria are met.</p>
+        <details><summary>The five entry criteria</summary><ol>
+          <li>Success criteria defined (confirmed by the SE)</li>
+          <li>Sales leadership aligned with the executive buyer; project is a business priority (RSD validates)</li>
+          <li>Customer gives access to its systems and people</li>
+          <li>Level of effort from Boomi confirmed</li>
+          <li>Agreement to move to commercial terms on success (AE and RSD validate)</li></ol></details></li>
+    </ol>
+    <div class="gate"><i class="d"></i>Technical win?<span>No → end</span></div>
+  </section>
+
+  <!-- 4 -->
+  <section class="stage" id="close" style="--c:var(--s4)">
+    <div class="sh"><span class="n">4</span><h2>Value &amp; close</h2></div>
+    <div class="own">Owner <span class="tagx ae">AE</span> · SE supports</div>
+    <div class="gate top"><i class="d"></i>Business case needed?<span>No → sizing</span></div>
+    <ol class="steps">
+      <li class="st"><h3>Build the business case <span class="tagx ae">AE</span></h3><p class="sum">Quantify ROI for the executive buyer.</p>
+        <details><summary>Tips</summary><ul><li>Quantify ROI and value for the executive buyer</li><li>Reuse the play's value messaging where one exists</li></ul></details></li>
+      <li class="st key"><h3>Sizing discussion</h3><p class="sum">SE and AE size the platform, with the ESM for services.</p>
+        <details><summary>Who and what</summary><ul><li>SE and AE size the platform</li><li>Bring the <b>ESM</b> (Enterprise Solutions Manager, PSO Sales) for professional services, hosted runtime or a Customer Care bundle</li></ul></details></li>
+      <li class="st"><h3>Proposal <span class="tagx ae">AE</span></h3><p class="sum">RVP, ESM, SE and AE aligned on the offer.</p>
+        <details><summary>Before you send</summary><ul><li>RVP, ESM, SE and AE aligned on the offer</li><li>Check the <a class="go" href="https://boomi.highspot.com/items/6aecb8c121c6ee0a547f82e5" target="_blank" rel="noopener">Sales Play Library</a> for active play offers</li></ul></details></li>
+    </ol>
+    <div class="end">Deal close</div>
+  </section>
+</div>
+
+<div class="legend">
+  <span class="lg"><span class="tagx ae">AE</span><span class="tagx se">SE</span> owns the step</span>
+  <span class="lg"><i class="dot"></i>Key step</span>
+  <span class="lg"><i class="dm"></i>Gate to clear</span>
+  <span class="lg"><i class="vc"></i>Bring someone in</span>
+  <span class="lg"><a class="go" href="#" onclick="return false" tabindex="-1">Link</a> opens the real tool</span>
+</div>
+
+<div class="bottom">
+  <div class="door">
+    <div class="k">One front door</div>
+    <h2>Global Solution Engineering Central</h2>
+    <p>Requests for SE, Domain Expert, Field Engineering, AI CoE and TASC support, in Jira Service Management.</p>
+    <ul>
+      <li><a href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/6259" target="_blank" rel="noopener">Request an Expert</a></li>
+      <li><a href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/2447" target="_blank" rel="noopener">POC Request</a></li>
+      <li><a href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/3841" target="_blank" rel="noopener">Demo Environment Access</a></li>
+      <li><a href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/3842" target="_blank" rel="noopener">Report Demo Issues</a></li>
+      <li><a href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/5976" target="_blank" rel="noopener">Digital Sales Team Request</a></li>
+      <li><a href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/6729" target="_blank" rel="noopener">Marketing event resources</a></li>
+      <li><a href="https://boomii.atlassian.net/servicedesk/customer/portal/2068/group/2145/create/6909" target="_blank" rel="noopener">Internal Projects</a></li>
+      <li><a href="https://boomilp.enterprise.slack.com/archives/C030HMVTX5Z" target="_blank" rel="noopener">RFx questions: #rfp</a></li>
+    </ul>
+    <div class="all"><a href="https://boomii.atlassian.net/servicedesk/customer/portal/2068" target="_blank" rel="noopener">Open the portal</a></div>
+  </div>
+  <div class="roster">
+    <h2>Know your <span>dream team</span></h2>
+    <div class="groups">
+      <div class="grp g-deal"><h3>Deal team</h3>
+        <div class="who"><div class="b">AE</div><div><b>Account Executive</b><span>Opportunity owner and main point of contact.</span></div></div>
+        <div class="who"><div class="b">SE</div><div><b>Solution Engineer</b><span>Technical owner: discovery, demo, POC, validation.</span></div></div>
+        <div class="who"><div class="b">BDR</div><div><b>Business Development Rep</b><span>Creates qualified leads.</span></div></div>
+      </div>
+      <div class="grp g-exp"><h3>Experts · via Request an Expert</h3>
+        <div class="who"><div class="b">DE</div><div><b>Solution Domain Experts</b><span>Product and play depth by domain; demo assets. Itamar Ben Hamo, VP.</span></div></div>
+        <div class="who"><div class="b">FE</div><div><b>Field Engineering &amp; Field CTOs</b><span>Deep technical, architecture, POC. Travis Price, VP.</span></div></div>
+        <div class="who"><div class="b">AI</div><div><b>AI CoE / AI Solution Architects</b><span>In-depth AI discussions and workshops.</span></div></div>
+      </div>
+      <div class="grp g-exec"><h3>Executive alignment</h3>
+        <div class="who"><div class="b">APX</div><div><b>APEX (formerly BIG)</b><span>C-suite alignment and product vision for large deals. Matt McLarty, CTO &amp; VP.</span></div></div>
+      </div>
+      <div class="grp g-svc"><h3>Services &amp; partners</h3>
+        <div class="who"><div class="b">ESM</div><div><b>Enterprise Solutions Manager</b><span>PSO Sales: services, hosted runtime, Customer Care.</span></div></div>
+        <div class="who"><div class="b">P</div><div><b>Partners</b><span>Technology and implementation partners; marketplace co-sell.</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div></main>
+
+<footer><div class="wrap"><span>Field Engineering · Domain Experts</span><span>Updated Nov 2026</span></div></footer>
+
+<script>
+(function(){
+  var btn = document.getElementById("toggle"), open = false;
+  btn.addEventListener("click", function(){
+    open = !open;
+    document.querySelectorAll("main details").forEach(function(d){ d.open = open; });
+    btn.textContent = open ? "Collapse all details" : "Expand all details";
+  });
+  /* ?open=1 shows everything (handy for printing or a screenshot) */
+  if (/[?&]open=1/.test(location.search)) btn.click();
+})();
+</script>
+</body>
+</html>
